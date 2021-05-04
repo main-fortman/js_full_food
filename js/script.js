@@ -151,14 +151,15 @@ window.addEventListener("DOMContentLoaded", () => {
     // Menu
 
     class MenuCard {
-        constructor(title, desc, price, img, alt) {
+        constructor(title, desc, price, img, alt, ...classes) {
             this.title = title;
             this.desc = desc;
             this.price = price;
             this.img = img;
             this.alt = alt;
-            this.transfer = 27;
+            this.classes = classes.length ? classes : ["menu__item"];
 
+            this.transfer = 27;
             this.changeToUAH();
         }
 
@@ -168,7 +169,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         render() {
             const comp = document.createElement("div");
-            comp.classList.add("menu__item");
+            this.classes.forEach(className => comp.classList.add(className));
             comp.innerHTML = `
                 <img src="${this.img}" alt="${this.alt}">
                     <h3 class="menu__item-subtitle">${this.title}</h3>
@@ -189,21 +190,21 @@ window.addEventListener("DOMContentLoaded", () => {
             'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
             8,
             'img/tabs/vegy.jpg',
-            'vegy'
+            'vegy',
         ),
         new MenuCard(
             'Меню “Премиум”',
             'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
             12,
             'img/tabs/elite.jpg',
-            'elite'
+            'elite',
         ),
         new MenuCard(
             'Меню "Постное"',
             'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
             10,
             'img/tabs/post.jpg',
-            'post'
+            'post',
         )
     ];
 
