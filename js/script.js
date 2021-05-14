@@ -135,18 +135,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("scroll", showModalByScroll);
 
-    const obj = {
-        num: 5,
-        say: function() {
-            console.log(this.num);
-            const say1 = () => {
-                console.log(this.num);
-            };
-            say1();
-        }
-    };
+    // const obj = {
+    //     num: 5,
+    //     say: function() {
+    //         console.log(this.num);
+    //         const say1 = () => {
+    //             console.log(this.num);
+    //         };
+    //         say1();
+    //     }
+    // };
 
-    obj.say();
+    // obj.say();
 
     // Menu
 
@@ -195,12 +195,20 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     const menu = document.querySelector(".menu__field div.container");
-    getResource("http://localhost:3000/menu")
-        .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => {
-                menu.append(new MenuCard(title, descr, price, img, altimg).render());
-            });
-        });
+
+    // getResource("http://localhost:3000/menu")
+    //     .then(data => {
+    //         data.forEach(({img, altimg, title, descr, price}) => {
+    //             menu.append(new MenuCard(title, descr, price, img, altimg).render());
+    //         });
+    //     });
+
+    axios.get('http://localhost:3000/menu')
+        .then(({data}) => {
+                    data.forEach(({img, altimg, title, descr, price}) => {
+                        menu.append(new MenuCard(title, descr, price, img, altimg).render());
+                    });
+                });
 
     // Forms
     const forms = document.querySelectorAll("form");
