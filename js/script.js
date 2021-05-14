@@ -295,18 +295,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Slider
     const slides = document.querySelectorAll(".offer__slide"),
+          slider = document.querySelector(".offer__slider"),
           prevSliderButton = document.querySelector(".offer__slider-prev"),
           nextSliderButton = document.querySelector(".offer__slider-next"),
           currentSlideSpan = document.querySelector("span#current"),
           totalSlidesSpan = document.querySelector("span#total"),
           slidesWrapper = document.querySelector(".offer__slider-wrapper"),
           slidesField = document.querySelector(".offer__slider-inner"),
-          width = window.getComputedStyle(slidesWrapper).width;
+          width = Number.parseInt(window.getComputedStyle(slidesWrapper).width);
     
     let slideIndex = 1;
     let offset = 0;
-
-    updateCurrentSlideNum();
 
     const totalSlidesNum = slides.length;
     totalSlidesSpan.textContent = zeroFill(totalSlidesNum);
@@ -318,14 +317,45 @@ window.addEventListener("DOMContentLoaded", () => {
     slidesWrapper.style.overflow = "hidden";
 
     slides.forEach(slide => {
-        slide.style.width = width;
+        slide.style.width = width + "px";
+    });
+
+    slider.style.position = "relative";
+
+    const indicators = document.createElement("ol"),
+          dots = [];
+
+    indicators.classList.add("carousel-indicators");
+    slider.append(indicators);
+
+    for (let i = 0; i < totalSlidesNum; i++) {
+        const dot = document.createElement("li");
+        dot.setAttribute('data-slide-to', i + 1);
+        dot.classList.add("dot");
+        indicators.append(dot);
+        dots.push(dot);
+        if (i == 0) {
+            dot.style.opacity = 1;
+        }
+    }
+
+    updateCurrentSlideNum();
+
+    dots.forEach(dot => {
+        dot.addEventListener("click", e => {
+            const slideTo = e.target.getAttribute("data-slide-to");
+            slideIndex = slideTo;
+            offset = width * (slideTo - 1);
+            slidesField.style.transform = `translateX(-${offset}px)`;
+            updateCurrentSlideNum();
+        });
     });
 
     prevSliderButton.addEventListener("click", () => {
         if (offset == 0) {
-            offset = Number.parseInt(width) * (slides.length - 1);
+            offset = width * (slides.length - 1);
         } else {
-            offset -= Number.parseInt(width);
+            offset -= width;
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -334,10 +364,10 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     nextSliderButton.addEventListener("click", () => {
-        if (offset == Number.parseInt(width) * (slides.length - 1)) {
+        if (offset == width * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += Number.parseInt(width);
+            offset += width;
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -347,34 +377,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function updateCurrentSlideNum() {
         currentSlideSpan.textContent = zeroFill(slideIndex);
+
+        dots.forEach(dot => dot.style.opacity = ".5");
+        dots[slideIndex - 1].style.opacity = 1;
     }
-
-    // showSlide();
-
-    // prevSliderButton.addEventListener("click", () => {
-    //     slideIndex = slideIndex == 1 ? totalSlidesNum : slideIndex - 1;
-    //     showSlide();
-    // });
-
-    // nextSliderButton.addEventListener("click", () => {
-    //     slideIndex = slideIndex == totalSlidesNum ? 1 : slideIndex + 1;
-    //     showSlide();
-    // });
 
     function zeroFill(num) {
         return +num > 9 ? num : `0${num}`;
     }
-
-    // function showSlide() {
-    //     slides.forEach( (slide, i) => {
-    //         if (slideIndex == i + 1) {
-    //             slide.classList.add("show");
-    //             slide.classList.remove("hide");
-    //         } else {
-    //             slide.classList.add("hide");
-    //             slide.classList.remove("show");
-    //         }
-    //     });
-    //     currentSlideSpan.textContent = zeroFill(slideIndex);
-    // }
 });
