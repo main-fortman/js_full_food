@@ -302,7 +302,7 @@ window.addEventListener("DOMContentLoaded", () => {
           totalSlidesSpan = document.querySelector("span#total"),
           slidesWrapper = document.querySelector(".offer__slider-wrapper"),
           slidesField = document.querySelector(".offer__slider-inner"),
-          width = Number.parseInt(window.getComputedStyle(slidesWrapper).width);
+          width = +window.getComputedStyle(slidesWrapper).width.match(/\d+/g);
     
     let slideIndex = 1;
     let offset = 0;
