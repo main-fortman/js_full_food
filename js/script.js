@@ -389,11 +389,27 @@ window.addEventListener("DOMContentLoaded", () => {
     // Calc
 
     const result = document.querySelector(".calculating__result span");
-    let sex = "female",
+    let sex = localStorage.getItem("sex") || "female",
         height, 
         weight,
         age,
-        ratio = 1.375;
+        ratio = +localStorage.getItem("ratio") || 1.375;
+
+    localStorage.setItem("sex", sex);
+    localStorage.setItem("ratio", ratio);
+
+    function initLocalSettings(parentSelector, activeClass) {
+        const elements = document.querySelectorAll(`${parentSelector} div`);
+        elements.forEach(element => {
+            element.classList.remove(activeClass);
+            if (element.getAttribute("id") == localStorage.getItem("sex")) {
+                element.classList.add(activeClass);
+            }
+            if (element.getAttribute("data-ratio") == localStorage.getItem("ratio")) {
+                element.classList.add(activeClass);
+            }
+        });
+    }
 
     function calcTotal() {
         if (!sex || !height || ! weight || !age || !ratio) {
@@ -414,9 +430,11 @@ window.addEventListener("DOMContentLoaded", () => {
         document.querySelector(parentSelector).addEventListener("click", e => {
             if (e.target.classList.contains("calculating__choose-item")) {
                 if(e.target.getAttribute("data-ratio")) {
-                    ratio = e.target.getAttribute("data-ratio");
+                    ratio = +e.target.getAttribute("data-ratio");
+                    localStorage.setItem("ratio", ratio);
                 } else {
                     sex = e.target.getAttribute("id");
+                    localStorage.setItem("sex", sex);
                 }
     
                 elements.forEach(item => {
@@ -433,6 +451,13 @@ window.addEventListener("DOMContentLoaded", () => {
     function getDynamicInformation(selector) {
         const input = document.querySelector(selector);
         input.addEventListener("input", () => {
+
+            if (input.value.match(/\D/g)) {
+                input.style.border = "1px solid red";
+            } else {
+                input.style.border = "none";
+            }
+
             switch(input.getAttribute("id")) {
                 case "height":
                     height = +input.value;
@@ -450,6 +475,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     calcTotal();
+    initLocalSettings("#gender", "calculating__choose-item_active");
+    initLocalSettings(".calculating__choose_big", "calculating__choose-item_active");
+
     getStaticInformation("#gender", "calculating__choose-item_active");
     getStaticInformation(".calculating__choose_big", "calculating__choose-item_active");
 
