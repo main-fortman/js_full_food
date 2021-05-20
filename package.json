@@ -25,6 +25,9 @@
     "@babel/preset-env": "^7.14.2",
     "babel-loader": "^8.2.2",
     "core-js": "^3.12.1",
+    "eslint": "^7.26.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-react": "^7.23.2",
     "json-server": "^0.16.3",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0"
